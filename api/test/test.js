@@ -12,6 +12,14 @@ router.get('/tests', async(req, res) => {
         res.status(500).send(error.message)
     }
 })
+router.get('/tests/:id', async(req, res) => {
+    try {
+        const tests = await Test.findById(req.params.id)
+        res.send(tests)
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+})
 
 router.post('/tests', async(req, res) => {
     try {
@@ -20,6 +28,7 @@ router.post('/tests', async(req, res) => {
         res.send(test)
     } catch (error) {
         res.status(500).send(error.message)
+        console.log(error);
     }
 })
 

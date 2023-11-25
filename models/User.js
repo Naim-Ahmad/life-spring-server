@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
    email: {
     type: String,
     required: true,
+    unique: true
    },
    bloodGroup: {
     type: String,
@@ -26,6 +27,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ['active', 'blocked'],
     required: true,
+   },
+   role: {
+      type: String,
+      required: true,
+      default: 'user'
    }
 })
 

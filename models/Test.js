@@ -16,11 +16,9 @@ const testSchema = new mongoose.Schema({
     },
     details: {
         type: String,
-        required: true,
     },
-    slog: {
-        type: String,
-       
+    date: {
+        type: String,   
     },
     price: {
         type: Number,
@@ -29,18 +27,16 @@ const testSchema = new mongoose.Schema({
     location: {
         type: String,
     },
-    date: {
-        type: String,
-        required: true,
-    },
     duration: {
         type: String,
+        default: "30 minute"
     },
     availableSlots: {
         type: Array,
+        required: true
     }
 
-})
+}, {timestamps: true})
 
 const Test = mongoose.model('Test', testSchema)
 
