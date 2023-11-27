@@ -12,6 +12,7 @@ router.get('/tests', async(req, res) => {
         res.status(500).send(error.message)
     }
 })
+
 router.get('/tests/:id', async(req, res) => {
     try {
         const tests = await Test.findById(req.params.id)

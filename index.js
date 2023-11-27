@@ -8,6 +8,11 @@ const userRouter = require("./api/user/user");
 const test = require("./api/test/test");
 const jwtRoute = require("./api/authentication/jsonWebToken");
 const cookieParser = require("cookie-parser");
+const stripeRouter = require("./api/stripe/stripe");
+const reservationRouter = require("./api/reservation/reservation");
+const recommendation = require("./api/recommendation");
+const banner = require("./api/banner/banner");
+
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -35,6 +40,18 @@ app.use(userRouter);
 
 /******** test collection ********/
 app.use(test);
+
+/******** stripe related api ********/
+app.use(stripeRouter)
+
+/******** reservation router ********/
+app.use(reservationRouter)
+
+/******** recommendation ********/
+app.use(recommendation)
+
+/******** banner  ********/
+app.use(banner)
 
 const main = async () => {
   await connectDB();

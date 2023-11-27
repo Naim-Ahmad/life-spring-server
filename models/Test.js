@@ -3,7 +3,6 @@ const testSchema = new mongoose.Schema({
     testName: {
         type: String,
         required: true,
-        
     },
     description: {
         type: String,
@@ -11,14 +10,11 @@ const testSchema = new mongoose.Schema({
     },
     imageURL: {
         type: String,
-        required: true,
-        
-    },
-    details: {
-        type: String,
+        required: true, 
     },
     date: {
         type: String,   
+        required: true
     },
     price: {
         type: Number,
@@ -34,9 +30,12 @@ const testSchema = new mongoose.Schema({
     availableSlots: {
         type: Array,
         required: true
+    },
+    reservation: {
+        type: [{type: mongoose.Types.ObjectId, ref: "Reservation"}],
+        default: []
     }
-
-}, {timestamps: true})
+})
 
 const Test = mongoose.model('Test', testSchema)
 

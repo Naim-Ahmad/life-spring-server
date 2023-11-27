@@ -26,13 +26,17 @@ const userSchema = new mongoose.Schema({
    status: {
     type: String,
     enum: ['active', 'blocked'],
-    required: true,
+    default: 'active'
    },
    role: {
       type: String,
       required: true,
       default: 'user'
-   }
+   },
+   reservation: {
+      type: [{type: mongoose.Types.ObjectId, ref: "Reservation"}],
+      default: []
+  }
 })
 
 const User = mongoose.model("User", userSchema)
