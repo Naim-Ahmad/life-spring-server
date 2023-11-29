@@ -1,15 +1,13 @@
 const router = require("express").Router();
 
+const verifyToken = require("../../middlewares/verifyToken");
 const Reservation = require("../../models/Reservation");
 const Test = require("../../models/Test");
 const User = require('../../models/User')
 
 router.get("/reservations", async (req, res) => {
   try {
-    const reservations = await Reservation.find().populate([
-      {path: 'test', model: 'Test', select: 'testName' },
-      // {path: 'user', model: 'User', select: 'name' },
-    ]);
+    const reservations = await Reservation.find().populate('test', 'testName date').populate('user', 'name email avatar');
     res.send(reservations);
   } catch (error) {
     res.status(500).send(error.message);
@@ -17,14 +15,14 @@ router.get("/reservations", async (req, res) => {
   }
 });
 
-router.get("/reservations/:email", async (req, res) => {
+router.get("/reservations/:userId", verifyToken, async (req, res) => {
   try {
-    const reservations = await Reservation.find({
-      user: req.params.email,
-    }).populate('test', 'testName date');
+    // console.log('reservation');
+    const reservations = await Reservation.find({user: req.params.userId}).populate('test', 'testName date').populate('user')
     res.send(reservations);
   } catch (error) {
     res.status(500).send(error.message);
+    console.log(error);
   }
 });
 
@@ -33,7 +31,7 @@ router.get("/reservations/:email", async (req, res) => {
  * 2.
  */
 
-router.post("/reservations/:email", async (req, res) => {
+router.post("/reservations/:email", verifyToken, async (req, res) => {
   try {
     const { testId, slot } = req.body;
 
@@ -48,7 +46,7 @@ router.post("/reservations/:email", async (req, res) => {
 
     // console.log(result, testId, slot);
 
-    let reservation = new Reservation({...req.body, user: req.params.email, test: testId});
+    let reservation = new Reservation({...req.body, test: testId});
     reservation = await reservation.save();
 
     // push reservation id 
@@ -62,6 +60,15 @@ router.post("/reservations/:email", async (req, res) => {
     console.log(error);
   }
 });
+
+router.patch('/reservations/:id', async(req, res) => {
+    try {
+        const reservation = await Reservation.findByIdAndUpdate(req.params.id, req.body , {upsert: true})
+        res.send(reservation)
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+})
 
 router.delete("/reservations/:id", async (req, res) => {
   try {

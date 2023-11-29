@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const Recommendation = require('../models/Recommendation')
+const Recommendation = require('../../models/Recommendation')
 
 
 router.get('/recommendations', async(req, res) => {

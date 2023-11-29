@@ -3,6 +3,8 @@ const express = require('express')
 const router = express.Router()
 
 const Test = require('../../models/Test')
+const verifyToken = require('../../middlewares/verifyToken')
+const verifyAdmin = require('../../middlewares/verifyAdmin')
 
 router.get('/tests', async(req, res) => {
     try {
@@ -13,7 +15,7 @@ router.get('/tests', async(req, res) => {
     }
 })
 
-router.get('/tests/:id', async(req, res) => {
+router.get('/tests/:id', verifyToken, async(req, res) => {
     try {
         const tests = await Test.findById(req.params.id)
         res.send(tests)
@@ -33,7 +35,7 @@ router.post('/tests', async(req, res) => {
     }
 })
 
-router.put('/tests/:id', async(req, res) => {
+router.put('/tests/:id', verifyToken, verifyAdmin, async(req, res) => {
     try {
         const test = await Test.findByIdAndUpdate(req.params.id, req.body, {new: true})
         res.send(test)
@@ -42,7 +44,7 @@ router.put('/tests/:id', async(req, res) => {
     }
 })
 
-router.delete('/tests/:id', async(req, res) => {
+router.delete('/tests/:id', verifyToken, verifyAdmin, async(req, res) => {
     try {
         const test = await Test.findByIdAndDelete(req.params.id)
         res.send(test)

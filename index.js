@@ -12,6 +12,8 @@ const stripeRouter = require("./api/stripe/stripe");
 const reservationRouter = require("./api/reservation/reservation");
 const recommendation = require("./api/recommendation");
 const banner = require("./api/banner/banner");
+const verifyToken = require("./middlewares/verifyToken");
+const User = require("./models/User");
 
 
 const app = express();
@@ -20,7 +22,7 @@ const port = process.env.PORT || 5000;
 /******** middlewares ********/
 app.use([
   cors({
-    origin: ["http://localhost:5173"],
+    origin: [process.env.CLIENT_URL_PROD1, process.env.CLIENT_URL_PROD2,process.env.CLIENT_URL_LOCAL],
     credentials: true,
   }),
   morgan("dev"),
@@ -31,6 +33,7 @@ app.use([
 app.get("/health", (req, res) => {
   res.status(200).json({ message: "Life Spring Server is running :)" });
 });
+
 
 /******** jwt api ********/
 app.use(jwtRoute);

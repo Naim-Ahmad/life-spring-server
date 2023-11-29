@@ -1,8 +1,10 @@
+const verifyToken = require("../../middlewares/verifyToken");
+
 const router = require("express").Router();
 require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-router.post("/create_payment_intent", async (req, res) => {
+router.post("/create_payment_intent", verifyToken, async (req, res) => {
   const { price } = req.body;
   try {
     const paymentIntent = await stripe.paymentIntents.create({

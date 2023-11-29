@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 require('dotenv').config()
 
+// console.log(process.env.DATABASE_LOCAL);
+
 const getConnectionURI = ()=>{
     if(process.env.NODE_ENV === 'development'){
         return process.env.DATABASE_LOCAL

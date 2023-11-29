@@ -6,7 +6,7 @@ const reservationSchema = new mongoose.Schema({
         required: true
     },
     user: {
-        type: String,
+        type: mongoose.Types.ObjectId,
         ref: 'User'
     },
     test: {
@@ -29,6 +29,10 @@ const reservationSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: 'pending'
+    },
+    resultURL: {
+        type: String,
+        
     },
     
 })
