@@ -10,10 +10,9 @@ const jwtRoute = require("./api/authentication/jsonWebToken");
 const cookieParser = require("cookie-parser");
 const stripeRouter = require("./api/stripe/stripe");
 const reservationRouter = require("./api/reservation/reservation");
-const recommendation = require("./api/recommendation");
+const recommendation = require("./api/recommendation/recommendation");
 const banner = require("./api/banner/banner");
-const verifyToken = require("./middlewares/verifyToken");
-const User = require("./models/User");
+
 
 
 const app = express();
@@ -22,7 +21,7 @@ const port = process.env.PORT || 5000;
 /******** middlewares ********/
 app.use([
   cors({
-    origin: [process.env.CLIENT_URL_PROD1, process.env.CLIENT_URL_PROD2,process.env.CLIENT_URL_LOCAL],
+    origin: [process.env.CLIENT_URL_PROD1, process.env.CLIENT_URL_PROD2, process.env.CLIENT_URL_LOCAL],
     credentials: true,
   }),
   morgan("dev"),

@@ -12,4 +12,14 @@ router.get('/recommendations', async(req, res) => {
     }
 })
 
+router.post('/recommendations', async(req, res) => {
+    try {
+        let recommendation = new Recommendation(req.body)
+        recommendation = await recommendation.save()
+        res.send(recommendation)
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+})
+
 module.exports = router;

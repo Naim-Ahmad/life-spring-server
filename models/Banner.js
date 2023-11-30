@@ -9,6 +9,9 @@ const bannerSchema = new mongoose.Schema({
     bannerURL: {
         type: String,
     },
+    promoCode: {
+        type: String,
+    },
     isActive: {
         type: Boolean,
         enum: [true, false],

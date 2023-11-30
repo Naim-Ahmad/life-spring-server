@@ -16,11 +16,11 @@ router.post("/createToken", async (req, res) => {
     const token = jwt.sign(req.body, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
+  
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
       })
       .send({ message: "token created!" });
   } catch (error) {
@@ -38,12 +38,21 @@ router.get("/isAdmin", verifyToken, async (req, res) => {
   }
 });
 
-router.delete('/deleteToken', async(req, res) => {
-    try {
-        res.clearCookie('token', {httpOnly: true})
-    } catch (error) {
-        res.status(500).send(error.message)
-    }
-})
+router.delete("/deleteToken", async (req, res) => {
+  try {
+    res.clearCookie("token", { httpOnly: true });
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+router.get("/isActive", verifyToken, async (req, res) => {
+  try {
+    const userData = await User.findOne({ email: req?.decoded?.email });
+    res.send(userData.status === "active");
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
 
 module.exports = router;

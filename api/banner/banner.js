@@ -20,6 +20,7 @@ router.get('/banners', async(req, res) => {
 
 router.post('/banners', async(req, res) => {
     try {
+        console.log(req.body);
         let banner = new Banner(req.body)
         banner = await banner.save()
         res.send(banner)
