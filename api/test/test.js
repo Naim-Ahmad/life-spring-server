@@ -46,7 +46,7 @@ router.get("/getPageData", async (req, res) => {
     const query = { date: { $gt: date } }; // Corrected the variable name to "date"
 
     const tests = await Test.find(query).skip(skip).limit(9);
-    console.log(tests);
+    // console.log(tests);
     res.send(tests);
   } catch (error) {
     res.status(500).send(error.message);
