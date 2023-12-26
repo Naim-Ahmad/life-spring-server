@@ -29,9 +29,9 @@ router.post("/createToken", async (req, res) => {
   }
 });
 
-router.get("/isAdmin", verifyToken, async (req, res) => {
+router.get("/isAdmin", async (req, res) => {
   try {
-    const query = { email: req?.decoded?.email };
+    const query = { email: req?.query?.email };
     const userData = await User.findOne(query);
     res.send(userData?.role === "admin");
   } catch (error) {
