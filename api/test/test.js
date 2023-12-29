@@ -8,7 +8,6 @@ const verifyAdmin = require("../../middlewares/verifyAdmin");
 
 router.get("/tests", async (req, res) => {
   try {
-    // await Test.insertMany()
     const tests = await Test.find();
     res.send(tests);
   } catch (error) {
@@ -25,32 +24,61 @@ router.get("/tests/:id", async (req, res) => {
   }
 });
 
+// router.get("/getPageData", async (req, res) => {
+//   try {
+//     if (req.query?.date) {
+//       const date = new Date(req.query.date);
+//       console.log(date);
+//       const query = { date: { $gt: date } };
+//       const result = await Test.find(query);
+//       return res.send(result);
+//     }
+
+//     const skip = req.query?.skip * 9;
+
+//     // console.log(skip, req.query?.skip);
+
+//     // console.log(localDate);
+//     const date = new Date();
+//     // console.log(date);
+
+//     const query = { date: { $gt: date } }; // Corrected the variable name to "date"
+
+//     const tests = await Test.find(query).skip(skip).limit(9);
+//     // console.log(tests);
+//     res.send(tests);
+//   } catch (error) {
+//     res.status(500).send(error.message);
+//     console.log(error);
+//   }
+// });
+
 router.get("/getPageData", async (req, res) => {
   try {
-    if (req.query?.date) {
-      const date = new Date(req.query.date);
+    const { date, skip = 0 } = req.query;
+
+    let filter = {};
+
+    filter.date = { $gt: new Date() };
+
+    if (date) {
+      const searchDate = new Date(date);
       console.log(date);
-      const query = { date: { $gt: date } };
-      const result = await Test.find(query);
-      return res.send(result);
+      filter.date = { $gt: searchDate };
     }
-
-    const skip = req.query?.skip * 9;
-
-    // console.log(skip, req.query?.skip);
-
-    // console.log(localDate);
-    const date = new Date();
-    // console.log(date);
-
-    const query = { date: { $gt: date } }; // Corrected the variable name to "date"
-
-    const tests = await Test.find(query).skip(skip).limit(9);
-    console.log(tests);
-    res.send(tests);
+    // console.log(date, skip);
+    // console.log(filter);
+    const tests = await Test.find(filter)
+      .skip(skip * 9)
+      .limit(9);
+    const data = {
+      totalData: await Test.countDocuments(filter),
+      tests,
+    };
+    res.send(data);
   } catch (error) {
-    res.status(500).send(error.message);
     console.log(error);
+    res.status(500).send(error);
   }
 });
 
@@ -59,13 +87,21 @@ router.get("/testCount", async (req, res) => {
     const date = new Date();
     // console.log(date);
 
-    const query = { date: { $gt: date } }; // Corrected the variable name to "date"
+    let query = { date: { $gt: date } }; // Corrected the variable name to "date"
+
+    if (req.query?.date) {
+      const searchDate = new Date(req.query?.date);
+      console.log(searchDate);
+      console.log("date query");
+      query = { date: { $gt: searchDate } };
+    }
 
     const tests = await Test.find(query);
     const length = tests.length;
     res.send({ count: length });
   } catch (error) {
     res.status(500).send(error.message);
+    console.log(error);
   }
 });
 

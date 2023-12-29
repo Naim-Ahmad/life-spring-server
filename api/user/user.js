@@ -32,7 +32,7 @@ router.get("/users/:email", verifyToken, async (req, res) => {
   }
 });
 
-router.post("/users", verifyToken, async (req, res) => {
+router.post("/users", async (req, res) => {
   try {
     // console.log(req.body);
     let user = new User(req.body);

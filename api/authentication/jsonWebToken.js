@@ -47,7 +47,7 @@ router.delete("/deleteToken", async (req, res) => {
   }
 });
 
-router.get("/isActive", async (req, res) => {
+router.get("/isActive", verifyToken, async (req, res) => {
   try {
     const userData = await User.findOne({ email: req?.query?.email });
     const status = userData.status === "active";
